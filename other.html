@@ -1,0 +1,90 @@
+<h1>FactoryGirl associations without callbacks</h1>
+<p>Given a posts.rb factory:</p>
+<pre lang="ruby"><code>factory :post do
+  user
+  text &quot;hello&quot;
+end
+</code></pre>
+<p>Following the <a href="https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#associations">guide</a> you would do this:</p>
+<pre lang="ruby"><code>factory :user do
+  name &quot;bob&quot;
+
+  transient do
+    post_count 1
+  end
+
+  after(:create) do |user, evaluator|
+    create_list(:post, post_count, user: user, text: &quot;#{user.name} is cool&quot;)
+  end
+end
+</code></pre>
+<p>This is alright, but leads to issues. For example, if you merely build a user, then that user will not have any posts.</p>
+<pre><code>&gt;&gt; FactoryGirl.build(:user).posts.size
+=&gt; 0
+&gt;&gt; FactoryGirl.create(:user).posts.size
+=&gt; 2
+</code></pre>
+<p>Also, in a more complex association structure it can be hard to access posts.</p>
+<pre lang="ruby"><code>
+factory :oeuvre do
+  after(:create) do |oeuvre, evaluator|
+    user = build :user
+    posts = create_list(:posts, 2, user: user)
+    replies = create_list(:replies, 2, user: user)
+    oeuvre.works.push *posts
+    oeuvre.works.push *replies
+  end
+end
+</code></pre>
+<h1>A better way</h1>
+<p>An <a href="https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#dependent-attributes">under-documented fact about attribute blocks</a> is that self is the evaluator object from the after create block. This allows you to call any transient, attribute, or association on the factory.</p>
+<pre lang="ruby"><code>factory :user do
+  name &quot;bob&quot;
+  posts { build_list(:post, post_count, user: nil, text: &quot;#{name} is cool&quot;) }
+  replies { build_list(:reply, reply_count, user: nil, text: &quot;#{name} is cool&quot;) }
+
+  transient do
+    post_count 1
+    reply_count 1
+  end
+end
+
+factory :oeuvre do
+  user { build :user }
+  works { user.posts + user.replies }
+end
+</code></pre>
+<p>As you can see above, the oeuvre factory is now much simpler. In addition build now gives the correct sizes.</p>
+<pre><code>&gt;&gt; FactoryGirl.build(:user).posts.size
+=&gt; 2
+&gt;&gt; FactoryGirl.create(:user).posts.size
+=&gt; 2
+</code></pre>
+<p>Last but not least, creating objects with association blocks as opposed to after create blocks is significantly faster:</p>
+<pre lang="ruby"><code>factory :user_a, class: 'User' do
+  after(:create) {|u,e| create_list(:post, 2, user: u) }
+end
+
+factory :user_b do
+  posts { build_list(:post, 2, user: nil) }
+end
+
+factory :post do
+  user
+end
+
+Benchmark.ips {|r|
+  r.report(&quot;after create&quot;) { FactoryGirl.create :user_a }
+  r.report(&quot;assn create&quot;) { FactoryGirl.create :user_b }
+  r.report(&quot;assn build&quot;) { FactoryGirl.build :user_b }
+}
+</code></pre>
+<pre><code>Warming up --------------------------------------
+        after create     3.000  i/100ms
+         assn create     8.000  i/100ms
+          assn build   207.000  i/100ms
+Calculating -------------------------------------
+        after create     35.724  (±22.4%) i/s -    171.000  in   5.040311s
+         assn create     91.368  (±17.5%) i/s -    448.000  in   5.049313s
+          assn build      2.061k (± 1.7%) i/s -     10.350k in   5.023673s
+</code></pre>
