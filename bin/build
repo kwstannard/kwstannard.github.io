@@ -3,7 +3,15 @@
 require 'bundler/inline'
 
 gemfile do
+  source 'https://rubygems.org'
   gem 'slim'
+  gem 'redcarpet'
+end
+
+md = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+
+Dir['src/*.md'].each do |path|
+  File.write(File.basename(path).sub('.md','.html'), md.render(File.read(path)))
 end
 
 Dir['src/*.slim'].each do |path|

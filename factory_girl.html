@@ -1,0 +1,124 @@
+<h1>FactoryGirl associations without callbacks</h1>
+
+<p>Given a posts.rb factory:</p>
+
+<p><code>ruby
+factory :post do
+  user
+  text &quot;hello&quot;
+end
+</code></p>
+
+<p>Following the <a href="https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#associations">guide</a> you would do this:</p>
+
+<p>``` ruby
+factory :user do
+  name &quot;bob&quot;</p>
+
+<p>transient do
+    post_count 1
+  end</p>
+
+<p>after(:create) do |user, evaluator|
+    create<em>list(:post, post</em>count, user: user, text: &quot;#{user.name} is cool&quot;)
+  end
+end
+```</p>
+
+<p>This is alright, but leads to issues. For example, if you merely build a user, then that user will not have any posts.</p>
+
+<p>```</p>
+
+<blockquote>
+<blockquote>
+<p>FactoryGirl.build(:user).posts.size
+=&gt; 0
+FactoryGirl.create(:user).posts.size
+=&gt; 2
+```</p>
+</blockquote>
+</blockquote>
+
+<p>Also, in a more complex association structure it can be hard to access posts.</p>
+
+<p>``` ruby</p>
+
+<p>factory :oeuvre do
+  after(:create) do |oeuvre, evaluator|
+    user = build :user
+    posts = create<em>list(:posts, 2, user: user)
+    replies = create</em>list(:replies, 2, user: user)
+    oeuvre.works.push *posts
+    oeuvre.works.push *replies
+  end
+end
+```</p>
+
+<h1>A better way</h1>
+
+<p>An <a href="https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#dependent-attributes">under-documented fact about attribute blocks</a> is that self is the evaluator object from the after create block. This allows you to call any transient, attribute, or association on the factory.</p>
+
+<p>``` ruby
+factory :user do
+  name &quot;bob&quot;
+  posts { build<em>list(:post, post</em>count, user: nil, text: &quot;#{name} is cool&quot;) }
+  replies { build<em>list(:reply, reply</em>count, user: nil, text: &quot;#{name} is cool&quot;) }</p>
+
+<p>transient do
+    post<em>count 1
+    reply</em>count 1
+  end
+end</p>
+
+<p>factory :oeuvre do
+  user { build :user }
+  works { user.posts + user.replies }
+end
+```</p>
+
+<p>As you can see above, the oeuvre factory is now much simpler. In addition build now gives the correct sizes.</p>
+
+<p>```</p>
+
+<blockquote>
+<blockquote>
+<p>FactoryGirl.build(:user).posts.size
+=&gt; 2
+FactoryGirl.create(:user).posts.size
+=&gt; 2
+```</p>
+</blockquote>
+</blockquote>
+
+<p>Last but not least, creating objects with association blocks as opposed to after create blocks is significantly faster:</p>
+
+<p>``` ruby
+factory :user<em>a, class: &#39;User&#39; do
+  after(:create) {|u,e| create</em>list(:post, 2, user: u) }
+end</p>
+
+<p>factory :user<em>b do
+  posts { build</em>list(:post, 2, user: nil) }
+end</p>
+
+<p>factory :post do
+  user
+end</p>
+
+<p>Benchmark.ips {|r|
+  r.report(&quot;after create&quot;) { FactoryGirl.create :user<em>a }
+  r.report(&quot;assn create&quot;) { FactoryGirl.create :user</em>b }
+  r.report(&quot;assn build&quot;) { FactoryGirl.build :user_b }
+}
+```</p>
+
+<p><code>
+Warming up --------------------------------------
+        after create     3.000  i/100ms
+         assn create     8.000  i/100ms
+          assn build   207.000  i/100ms
+Calculating -------------------------------------
+        after create     35.724  (±22.4%) i/s -    171.000  in   5.040311s
+         assn create     91.368  (±17.5%) i/s -    448.000  in   5.049313s
+          assn build      2.061k (± 1.7%) i/s -     10.350k in   5.023673s
+</code></p>
