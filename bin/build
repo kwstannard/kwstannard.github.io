@@ -1,0 +1,12 @@
+#! /usr/bin/env ruby
+
+require 'bundler/inline'
+
+gemfile do
+  gem 'slim'
+end
+
+Dir['src/*.slim'].each do |path|
+  t = Slim::Template.new(path)
+  File.write(t.basename.sub('.slim',''), t.render)
+end
