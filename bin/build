@@ -5,13 +5,14 @@ require 'bundler/inline'
 gemfile do
   source 'https://rubygems.org'
   gem 'slim'
-  gem 'redcarpet'
+  gem 'kramdown'
 end
 
-md = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-
 Dir['src/*.md'].each do |path|
-  File.write(File.basename(path).sub('.md','.html'), md.render(File.read(path)))
+  File.write(
+    File.basename(path).sub('.md','.html'),
+    Kramdown::Document.new(File.read(path), input: 'markdown').to_html,
+  )
 end
 
 Dir['src/*.slim'].each do |path|

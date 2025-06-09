@@ -37,7 +37,6 @@ This is alright, but leads to issues. For example, if you merely build a user, t
 Also, in a more complex association structure it can be hard to access posts.
 
 ``` ruby
-
 factory :oeuvre do
   after(:create) do |oeuvre, evaluator|
     user = build :user
@@ -49,7 +48,7 @@ factory :oeuvre do
 end
 ```
 
-# A better way
+# A better way
 
 An [under-documented fact about attribute blocks](https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#dependent-attributes) is that self is the evaluator object from the after create block. This allows you to call any transient, attribute, or association on the factory.
 
