@@ -1,4 +1,30 @@
-<head><link href="monospace.css" rel="stylesheet" /><style>body {
+<head><link href="monospace.css" rel="stylesheet" /><style>@keyframes sineWave {
+  0% { padding: 0px; background: #77ff00; z-index: 100; }
+  10% { padding: 30px; background: #99ff00; z-index: 90; }
+  20% { padding: 58px; background: #ccff00; z-index: 80; }
+  30% { padding: 80px; background: #ddff00; z-index: 70; }
+  40% { padding: 95px; background: #eeff00; z-index: 60; }
+  50% { padding: 100px; background: #ffff00; z-index: 50; }
+  60% { padding: 95px; background: #eeff00; z-index: 40; }
+  70% { padding: 80px; background: #ddff00; z-index: 30; }
+  80% { padding: 58px; background: #ccff00; z-index: 20; }
+  90% { padding: 30px; background: #99ff00; z-index: 10; }
+  100% { padding: 0px; background: #77ff00; z-index: 0; }
+}
+.sineWave {
+  border-radius: 50%;
+  animation: sineWave 15s linear infinite;
+  margin: auto;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+.delay1 { animation-delay: -3s; }
+.delay2 { animation-delay: -6s; }
+.delay3 { animation-delay: -9s; }
+.delay4 { animation-delay: -12s; }
+body {
   max-width: 1000px;
   margin: auto;
 }
@@ -92,7 +118,7 @@ everything else. This would mean they could own their configs, own
 their database connections, and own their migrations. This will
 provide missing waypoints between a monolith and distributed
 services, allowing much easier integration testing and iteration on
-design.</td><td><p><a href="https://github.com/kwstannard/EngineFirst">Proof of Concept.</a></p><p><a href="https://github.com/rails/rails/pulls/kwstannard">Latest attempts to upstream.</a></p></td><td class="relative"><div class="log-circle" id="log-circle-1"></div><div class="log-circle" id="log-circle-2"></div><div class="log-circle" id="log-circle-3"></div></td></tr><tr><td>Pry-Rails</td><td>Utilized Docker to test Pry-Rails against a matrix of Ruby and Rails versions.</td><td><a href="https://github.com/pry/pry-rails/pull/135">pry-rails/pull/135</a></td><td><pre><code>≽^•⩊•^≼</code></pre></td></tr><tr><td>dotenv implementation</td><td>A 9 line dotenv implementation I made. It does the standard dotenv things and also does
+design.</td><td><p><a href="https://github.com/kwstannard/EngineFirst">Proof of Concept.</a></p><p><a href="https://github.com/rails/rails/pulls/kwstannard">Latest attempts to upstream.</a></p></td><td class="relative"><div class="log-circle" id="log-circle-1"></div><div class="log-circle" id="log-circle-2"></div><div class="log-circle" id="log-circle-3"></div></td></tr><tr><td>Pry-Rails</td><td>Utilized Docker to test Pry-Rails against a matrix of Ruby and Rails versions.</td><td><a href="https://github.com/pry/pry-rails/pull/135">pry-rails/pull/135</a></td><td class="relative"><div class="sineWave"></div><div class="sineWave delay1"></div><div class="sineWave delay2"></div><div class="sineWave delay3"></div><div class="sineWave delay4"></div></td></tr><tr><td>dotenv implementation</td><td>A 9 line dotenv implementation I made. It does the standard dotenv things and also does
 parent directory walk. Useful for having multiple projects or apps for a single
 organization. My use case was to have a work directory containing .env files with
 common values and also work repositories.</td><td><a href="https://github.com/kwstannard/kws-scripts-and-configs/blob/master/bin/de">de</a></td><td><strong><pre><code>\ /\ /\ /\ /
