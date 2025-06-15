@@ -1,0 +1,151 @@
+head
+  link rel="stylesheet" href="monospace.css"
+
+  css:
+    html {
+      background: var(--background-color-alt);
+    }
+    p {
+      padding: 0.5em;
+      border-left-style: outset;
+      border-right-style: outset;
+      border-radius: 0.6em;
+      background: var(--background-color);
+    }
+
+    h1,h2,h3,h4 {
+      padding: 0.6em;
+      margin: 0.25em auto 0.25em auto;
+      border-radius: 0.5em;
+      width:fit-content;
+      text-transform: initial;
+      background: var(--background-color);
+    }
+
+  javascript:
+
+    var dir = 1
+    var scale = 1
+    fun = function() {
+      Object.values(document.getElementsByTagName("p")).forEach(function(par) {
+        par.style.setProperty("transform", "rotate("+scale*dir+"deg)")
+        dir = -1 * dir
+        scale = scale - 0.05
+      })
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fun)
+    } else {
+      fun()
+    }
+    
+body
+  h1 A Case for Rails Engines
+
+  h2 Assumed knowledge of the following
+  p Rails Engines, Rack, WebMock, distributed services, monoliths, interfaces.
+
+  h2 Problem Statement
+
+  p
+    |
+      Over my career I have seen a lot of monoliths and distributed services.
+      Often a company starts with a monolith and after a few years the initial
+      designs start hindering further development. Eventually splitting the
+      monolith into distributed services is suggested enough times that it
+      happens. Shortly after that the distributed service design also starts to
+      grate, but now the barrier to change is so high that teams running other
+      services might as well be a different company.
+
+  p
+    |
+      Distributed services calcify the design. We need to test and iterate the
+      design prior to deploying a distributed service. The Rails ecosystem
+      provides tools to do this.
+
+  h2 Start of a solution
+
+  p
+    |
+      Computers are very good at simulating other computers. What would be
+      helpful is to have a series of defined steps between a monolithic app and
+      distributed service. You could quickly iron out issues prior to jumping
+      into the muck of distributed services.
+
+  p
+    |
+      Starting from a monolith, the next step is some form of in-application
+      organization framework. There are a few options here, but given that we are using
+      Rails and the general dircetion I suggest using a Rails Engine for reasons
+      you can see later.
+
+  p
+    |
+      To make this more concrete, lets imagine that we are starting from a
+      monolithic ToDo Rails app and we want to break out the
+      Authentication and Authorization domain out from the mess. We will make
+      a modules directory and create a new Engine inside it called Auth.
+
+  h2 The 4 stages of isolation
+
+  h4 Stage one - Isolating code
+
+  p
+    | 
+      Start by moving the auth code into Auth engine. As you do this, isolate the
+      code behind an API. Work to reduce the size and scope of the API.
+
+  h4 Stage two - Isolating the data
+
+  p
+    |
+      You may want to increase the isolation even more. Create a database and have
+      the Auth engine connect to it. The engine allows you to find and squash
+      any areas of the ToDo app that are still reaching past the engine interface
+      to the database interface.
+
+  h4 Stage three - Adding an HTTP interface
+
+  p
+    |
+      Ruby's WebMock gem allows you to selectively intercept HTTP requests and
+      route them to an arbitrary Rack interface. Coincidentally, Rails Engines
+      are Rack interfaces. What this allows is for you to smoothly transition
+      one API call at a time from code to HTTP calls. You may want to introduce
+      artificial lag or other network conditions to see how the system
+      responds.
+
+  p
+    |
+      You might wonder why this is listed as a stopping point. This is a valid
+      state for both development and test environments as it lets you run the
+      Auth service without needing an actual remote deployment. In my experience
+      this has always been a massive problem with remote services, requiring
+      intense discussion and coordination to accomplish. But, by putting the
+      remote service in a Rails engine, you can get this for much cheaper.
+
+  h4 Stage four - Deploying a remote service
+
+  p
+    |
+      You run a new application and load the Auth service in it. Then in the
+      ToDo app, start routing more and more Auth requests from the internal
+      Auth service to the remote Auth service while monitoring the transition,
+      until eventually all traffic is going to the remote service.
+  p
+    |
+      Congratulations, you now have transitioned a service to fully remote
+      while giving yourself lots of ability to see problems before they become
+      nigh impossible to fix.
+
+  h2 Postscript - The ActiveRecord::Base problem
+
+  p
+    |
+      The data separation step is more difficult than it needs to be because
+      ActiveRecord::Base hard references are the cause of weird things like
+      needing to "install" engine db migrations and needing to tell the containing
+      application about how to connect to the engine database. This is hackable with
+      some clever monkey patches, but it would be preferable if engines could be fully
+      self contained out of the box and set themselves up with the Railties system.
