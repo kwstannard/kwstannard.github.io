@@ -1,45 +1,7 @@
 head
-  link rel="stylesheet" href="monospace.css"
+  link rel="stylesheet" href="style/post.css"
+  script src="script/post.js"
 
-  css:
-    html {
-      background: var(--background-color-alt);
-    }
-    p {
-      padding: 0.5em;
-      border-left-style: outset;
-      border-right-style: outset;
-      border-radius: 0.6em;
-      background: var(--background-color);
-    }
-
-    h1,h2,h3,h4 {
-      padding: 0.6em;
-      margin: 0.25em auto 0.25em auto;
-      border-radius: 0.5em;
-      width:fit-content;
-      text-transform: initial;
-      background: var(--background-color);
-    }
-
-  javascript:
-
-    var dir = 1
-    var scale = 1
-    fun = function() {
-      Object.values(document.getElementsByTagName("p")).forEach(function(par) {
-        par.style.setProperty("transform", "rotate("+scale*dir+"deg)")
-        dir = -1 * dir
-        scale = scale - 0.05
-      })
-    };
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", fun)
-    } else {
-      fun()
-    }
-    
 body
   h1 Symlink as an Organizational Tool
 

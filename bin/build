@@ -1,5 +1,7 @@
 #! /usr/bin/env ruby
 
+ARGV.concat Dir['src/*'] if ARGV.empty?
+
 require 'bundler/inline'
 
 gemfile do
@@ -8,14 +10,15 @@ gemfile do
   gem 'kramdown'
 end
 
-Dir['src/*.md'].each do |path|
-  File.write(
-    File.basename(path).sub('.md','.html'),
-    Kramdown::Document.new(File.read(path), input: 'markdown').to_html,
-  )
-end
-
-Dir['src/*.slim'].each do |path|
-  t = Slim::Template.new(path)
-  File.write(t.basename.sub('.slim',''), t.render)
+ARGV.each do |path|
+  case path
+  when /\.md$/
+    File.write(
+      File.basename(path).sub('.md','.html'),
+      Kramdown::Document.new(File.read(path), input: 'markdown').to_html,
+    )
+  when /\.slim$/
+    t = Slim::Template.new(path)
+    File.write(t.basename.sub('.slim',''), t.render)
+  end
 end

@@ -1,36 +1,4 @@
-<head><link href="monospace.css" rel="stylesheet" /><style>html {
-  background: var(--background-color-alt);
-}
-p {
-  padding: 0.5em;
-  border-left-style: outset;
-  border-right-style: outset;
-  border-radius: 0.6em;
-  background: var(--background-color);
-}
-
-h1,h2,h3,h4 {
-  padding: 0.6em;
-  margin: 0.25em auto 0.25em auto;
-  border-radius: 0.5em;
-  width:fit-content;
-  text-transform: initial;
-  background: var(--background-color);
-}</style><script>var dir = 1
-var scale = 1
-fun = function() {
-  Object.values(document.getElementsByTagName("p")).forEach(function(par) {
-    par.style.setProperty("transform", "rotate("+scale*dir+"deg)")
-    dir = -1 * dir
-    scale = scale - 0.05
-  })
-};
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", fun)
-} else {
-  fun()
-}</script></head><body><h1>A Case for Rails Engines</h1><h2>Assumed knowledge of the following</h2><p>Rails Engines, Rack, WebMock, distributed services, monoliths, interfaces.</p><h2>Problem Statement</h2><p>Over my career I have seen a lot of monoliths and distributed services.
+<head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body><h1>A Case for Rails Engines</h1><h2>Assumed knowledge of the following</h2><p>Rails Engines, Rack, WebMock, distributed services, monoliths, interfaces.</p><h2>Problem Statement</h2><p>Over my career I have seen a lot of monoliths and distributed services.
 Often a company starts with a monolith and after a few years the initial
 designs start hindering further development. Eventually splitting the
 monolith into distributed services is suggested enough times that it
