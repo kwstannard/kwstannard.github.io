@@ -34,7 +34,7 @@ body
 
     Most software engineering requires some number of loops. There is the micro-loops of Red-Green-Refactor. There is the bigger loop of commit-push-merge. There is the bigger loop still of build-and-release. Slow-downs in these make changes harder. They stiffen and calcify your thinking. When your build time increases, your engineers become less willing to agree to comments on PRs because it will trigger more builds and more waiting. Reviewers will rubber stamp the PR rather than risk getting stuck waiting 30 minutes for their changes to be completed and built. More coupling, bad domain modeling, and bad testing get introduced. The downward spiral of calcification intensifies.
 
-    ## Prevention
+    ## Prevention Strategies
 
     There is no silver bullet here. There are dozens of tools and skills. To name a few:
 
@@ -54,17 +54,22 @@ body
 
     ### Small refactorings
 
-    Little problems left to fester will often become very big problems given enough time. Normalize your engineers spending 5-15 minutes per day fixing little issues.
+    Little problems left to fester will often become very big problems given enough time. Normalize your engineers spending 5-15 minutes per feature striking while the iron is hot in order to turn a direct reference into a dependency injection or removing a Law of Demeter violation.
 
-    ## Reversion
+    ## Remediation Strategies
 
-    I am sorry for you. You will need broad support to turn things around, but if you don’t have that you can do a few things that will might help convince others or at the least, convince youself.
+    I am sorry. You will need broad support to turn things around, but if you don’t have that you can do a few things that will might help convince others or at the least, convince youself.
 
-    ### fix small things
+    ### Fix small things
 
     Pick a small subsystem or class and peck away at it. Reduce the public API from 5 functions to 4 functions. Fix a naming issue. Delete those pointless tests that someone wrote. Add a useful test.
 
     Do this enough and you will make surprising headway over the course of your tenure. Do not let this spiral and take up your whole day. If the only thing you can think of is a big rewrite, you may want to go read the Refactoring book for ideas.
+
+    ### Ratcheting
+
+    Utilize automation to block certain things from happening. For instance, you could attempt block certain
+    tokens from being used in some directories with a custom linter.
 
     ## Conclusion
 

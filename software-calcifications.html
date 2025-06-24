@@ -26,7 +26,7 @@
 
 <p>Most software engineering requires some number of loops. There is the micro-loops of Red-Green-Refactor. There is the bigger loop of commit-push-merge. There is the bigger loop still of build-and-release. Slow-downs in these make changes harder. They stiffen and calcify your thinking. When your build time increases, your engineers become less willing to agree to comments on PRs because it will trigger more builds and more waiting. Reviewers will rubber stamp the PR rather than risk getting stuck waiting 30 minutes for their changes to be completed and built. More coupling, bad domain modeling, and bad testing get introduced. The downward spiral of calcification intensifies.</p>
 
-<h2 id="prevention">Prevention</h2>
+<h2 id="prevention-strategies">Prevention Strategies</h2>
 
 <p>There is no silver bullet here. There are dozens of tools and skills. To name a few:</p>
 
@@ -46,17 +46,22 @@
 
 <h3 id="small-refactorings">Small refactorings</h3>
 
-<p>Little problems left to fester will often become very big problems given enough time. Normalize your engineers spending 5-15 minutes per day fixing little issues.</p>
+<p>Little problems left to fester will often become very big problems given enough time. Normalize your engineers spending 5-15 minutes per feature striking while the iron is hot in order to turn a direct reference into a dependency injection or removing a Law of Demeter violation.</p>
 
-<h2 id="reversion">Reversion</h2>
+<h2 id="remediation-strategies">Remediation Strategies</h2>
 
-<p>I am sorry for you. You will need broad support to turn things around, but if you don’t have that you can do a few things that will might help convince others or at the least, convince youself.</p>
+<p>I am sorry. You will need broad support to turn things around, but if you don’t have that you can do a few things that will might help convince others or at the least, convince youself.</p>
 
-<h3 id="fix-small-things">fix small things</h3>
+<h3 id="fix-small-things">Fix small things</h3>
 
 <p>Pick a small subsystem or class and peck away at it. Reduce the public API from 5 functions to 4 functions. Fix a naming issue. Delete those pointless tests that someone wrote. Add a useful test.</p>
 
 <p>Do this enough and you will make surprising headway over the course of your tenure. Do not let this spiral and take up your whole day. If the only thing you can think of is a big rewrite, you may want to go read the Refactoring book for ideas.</p>
+
+<h3 id="ratcheting">Ratcheting</h3>
+
+<p>Utilize automation to block certain things from happening. For instance, you could attempt block certain
+  tokens from being used in some directories.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
