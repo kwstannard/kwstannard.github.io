@@ -1,9 +1,9 @@
 @import url("monospace.css");
-html {
+
+:root {
   background: var(--background-color-alt);
-  max-width: 50em;
 }
-p {
+pre, p {
   padding: 0.5em;
   border-left-style: outset;
   border-right-style: outset;
@@ -18,4 +18,10 @@ h1,h2,h3,h4 {
   width:fit-content;
   text-transform: initial;
   background: var(--background-color);
+}
+pre {
+  margin: 2em;
+  border-radius: 0.5em;
+  background: var(--background-color);
+  font-size: 75%;
 }

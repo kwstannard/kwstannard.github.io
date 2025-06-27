@@ -8,14 +8,17 @@ gemfile do
   source 'https://rubygems.org'
   gem 'slim'
   gem 'kramdown'
+  gem 'kramdown-parser-gfm'
 end
+
+Slim::Embedded.options[:markdown] = { input: "GFM" }
 
 ARGV.each do |path|
   case path
   when /\.md$/
     File.write(
       File.basename(path).sub('.md','.html'),
-      Kramdown::Document.new(File.read(path), input: 'markdown').to_html,
+      Kramdown::Document.new(File.read(path), input: 'GFM').to_html,
     )
   when /\.slim$/
     t = Slim::Template.new(path)
