@@ -3,10 +3,13 @@
 :root {
   background: var(--background-color-alt);
 }
+* {
+  border-color: var(--border-color);
+}
 pre, p {
   padding: 0.5em;
-  border-left-style: outset;
-  border-right-style: outset;
+  border-left-style: solid;
+  border-right-style: solid;
   border-radius: 0.75em;
   background: var(--background-color);
 }
