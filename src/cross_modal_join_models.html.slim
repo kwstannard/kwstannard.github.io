@@ -1,0 +1,61 @@
+head
+  link rel="stylesheet" href="style/post.css"
+  script src="script/post.js"
+body
+  h1 Cross modal join objects
+
+  h3 What?
+
+  p Sometimes what making an application, you have multiple user types. Like, you could
+    have an insurance company agent and a provider, or you have a lender and a
+    borrower. The point is that each user type is in your system for drastically
+    different reasons. Often these entities have a relationships with each other and you
+    probably modeled that with a join table and a model covering the join table. The
+    join table will then certainly gain a bunch of columns describing the relationship.
+
+  p There is a very common problem that happens here. User type A will have vastly
+    different needs for the join table than user type B and this usually results in
+    a bunch of overly complex code and difficult to solve bugs. If you notice this too,
+    read on.
+
+  h3 A solution
+
+  p You can resolve much of this tension by creating two join models instead of one.
+    One will be for the A-to-B direction and the other will be for the B-to-A direction.
+    With this you can specify things like attributes that will only be visible to A or B;
+    You can have logic that only applies to one or the other; You can create controllers
+    and views for each direction.
+
+  h3 Example
+
+  p Here we have a simple setup, where a provider has clients. By splitting the join into
+    ProvidersClient and ClientsProvider, we can have a flagged attribute that only shows up
+    when starting with a provider and viewing the clients as a simple example.
+
+  pre
+    code |
+      class Provider < AppModel
+        has_many :providers_clients
+        has_many :clients, through: :providers_clients
+
+      class Client < AppModel
+        has_many :clients_providers
+        has_many :providers, through: :clients_providers
+
+      class ProvidersClient < AppModel
+        belongs_to :client
+        belongs_to :provider
+
+        singleton_class.alias_method :old_all, :all
+        def self.all
+          old_all.joins(:provider).select('clients.*, providers_clients.plan, providers_clients.flagged')
+        end
+
+      class ClientsProvider < AppModel
+        belongs_to :client
+        belongs_to :provider
+
+        singleton_class.alias_method :old_all, :all
+        def self.all
+          old_all.joins(:provider).select('providers.*, clients_providers.plan')
+        end

@@ -16,10 +16,9 @@ Slim::Embedded.options[:markdown] = { input: "GFM" }
 ARGV.each do |path|
   case path
   when /\.md$/
-    File.write(
-      File.basename(path).sub('.md','.html'),
-      Kramdown::Document.new(File.read(path), input: 'GFM').to_html,
-    )
+    @body = Kramdown::Document.new(File.read(path), input: 'GFM').to_html
+    t = Slim::Template.new("post.html.slim")
+    File.write(File.basename(path).sub('.md','.html'), t.render { @body })
   when /\.slim$/
     t = Slim::Template.new(path)
     File.write(t.basename.sub('.slim',''), t.render)
