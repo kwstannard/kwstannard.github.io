@@ -1,0 +1,31 @@
+<head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body><h1 id="id-as-a-form-of-primitive-obsession">ID as a form of primitive obsession</h1>
+
+<p>Primitive obsession: the act of utilizing language primitives like strings,
+integers, arrays, and such to represent complex domain objects. A common
+example of this is representing money with ints or floats. Primitive obsesssion
+tends to result in the spread of logic that could be cohessively contained in
+one file across the application, repitition of conversion logic through flows,
+and many strange hacks that slow comprehension.</p>
+
+<p>A common issue I find across many organizations that is quietly hindering them
+is the utilization of identifiers inside of domain logic. Somewhat recently it
+hit me that this is a form of primitive obsession. Identifiers are strings or
+integers and they represent much larger domain objects, which qualifies them as
+a form of primitive obsession. Code that utilizes identifiers is noticably
+harder to refactor and usually requires a lot of database accesses.</p>
+
+<h2 id="how-to-spot-id-obsesssion">How to spot ID obsesssion</h2>
+
+<p>Imagine you are working in Rails or an equivalent framework. There is an
+interface layer (controllers, workers, etc) that takes external requests
+and converts them into domain actions. That conversion layer is the only
+place that identifiers should be handled. The identifiers should be converted
+to domain objects at that point and all domain logic will utilize those domain
+objects.</p>
+
+<p>So, if you happen to see a method on a model instance that utilizes an ID,
+then that is incorrect. Instead, pass a model instance to that method.</p>
+
+<p>If you have a service object, that service object should only be handling
+models and not identifiers.</p>
+</body>
