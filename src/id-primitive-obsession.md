@@ -2,19 +2,19 @@
 
 Primitive obsession: the act of utilizing language primitives like strings,
 integers, arrays, and such to represent complex domain objects. A common
-example of this is representing money with ints or floats. Primitive obsesssion
-tends to result in the spread of logic that could be cohessively contained in
-one file across the application, repitition of conversion logic through flows,
+example of this is representing money with ints or floats. Primitive obsession
+tends to result in the spread of logic that could be cohesively contained in
+one file across the application, repetition of conversion logic through flows,
 and many strange hacks that slow comprehension.
 
 A common issue I find across many organizations that is quietly hindering them
 is the utilization of identifiers inside of domain logic. Somewhat recently it
 hit me that this is a form of primitive obsession. Identifiers are strings or
 integers and they represent much larger domain objects, which qualifies them as
-a form of primitive obsession. Code that utilizes identifiers is noticably
+a form of primitive obsession. Code that utilizes identifiers is noticeably
 harder to refactor and usually requires a lot of database accesses.
 
-## How to spot ID obsesssion
+## How to spot ID obsession
 
 Imagine you are working in Rails or an equivalent framework. There is an
 interface layer (controllers, workers, etc) that takes external requests

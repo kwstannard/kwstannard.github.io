@@ -1,5 +1,15 @@
 head
   link rel="stylesheet" href="style/post.css"
   script src="script/post.js"
-body
-  == yield
+body onload="checkfun()"
+  aside
+    h4 Options
+    table
+      tr
+        td
+          label for="fun" Tilt
+        td
+          input type="checkbox" id="fun" pattern="true" onclick="checkfun()" checked="true"
+
+  main
+    == yield
