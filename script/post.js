@@ -1,8 +1,9 @@
 var dir = 1
-var scale = 1
+var scale = 0.75
 
 checkfun = function() {
   element = document.getElementById("fun")
+  scale = 0.75
   if (element.checked) {
     fun()
   } else {
