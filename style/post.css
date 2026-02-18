@@ -29,11 +29,13 @@ pre {
   font-size: 75%;
 }
 
-body {
-  background-image: url("../rope.png");
-  background-position: center center;
-  background-repeat: repeat-y;
-  background-attachment: scroll;
+@media (prefers-color-scheme: light) {
+  body {
+    background-image: url("../rope.png");
+    background-position: center center;
+    background-repeat: repeat-y;
+    background-attachment: scroll;
+  }
 }
 
 aside {
