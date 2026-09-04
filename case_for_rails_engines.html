@@ -1,4 +1,4 @@
-<head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body><h1>A Case for Rails Engines</h1><h2>Assumed knowledge of the following</h2><p>Rails Engines, Rack, WebMock, distributed services, monoliths, interfaces.</p><h2>Problem Statement</h2><p>Over my career I have seen a lot of monoliths and distributed services.
+<!DOCTYPE html><html><head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body onload="checkfun()"><aside><h4><a href="index.html">Main Page</a></h4><h4>Options</h4><table><tr><td><label for="fun">Tilt</label></td><td><input checked="true" id="fun" onclick="checkfun()" pattern="true" type="checkbox" /></td></tr></table></aside><main><head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body><h1>A Case for Rails Engines</h1><h2>Assumed knowledge of the following</h2><p>Rails Engines, Rack, WebMock, distributed services, monoliths, interfaces.</p><h2>Problem Statement</h2><p>Over my career I have seen a lot of monoliths and distributed services.
 Often a company starts with a monolith and after a few years the initial
 designs start hindering further development. Eventually splitting the
 monolith into distributed services is suggested enough times that it
@@ -39,4 +39,4 @@ ActiveRecord::Base hard references are the cause of weird things like
 needing to "install" engine db migrations and needing to tell the containing
 application about how to connect to the engine database. This is hackable with
 some clever monkey patches, but it would be preferable if engines could be fully
-self contained out of the box and set themselves up with the Railties system.</p></body>
+self contained out of the box and set themselves up with the Railties system.</p></body></main></body></html>

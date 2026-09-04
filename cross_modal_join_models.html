@@ -1,4 +1,4 @@
-<head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body><h1>Cross modal join objects</h1><h3>What?</h3><p>Sometimes what making an application, you have multiple user types. Like, you could
+<!DOCTYPE html><html><head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body onload="checkfun()"><aside><h4><a href="index.html">Main Page</a></h4><h4>Options</h4><table><tr><td><label for="fun">Tilt</label></td><td><input checked="true" id="fun" onclick="checkfun()" pattern="true" type="checkbox" /></td></tr></table></aside><main><head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body><h1>Cross modal join objects</h1><h3>What?</h3><p>Sometimes what making an application, you have multiple user types. Like, you could
 have an insurance company agent and a provider, or you have a lender and a
 borrower. The point is that each user type is in your system for drastically
 different reasons. Often these entities have a relationships with each other and you
@@ -37,4 +37,4 @@ class ClientsProvider < AppModel
   singleton_class.alias_method :old_all, :all
   def self.all
     old_all.joins(:provider).select('providers.*, clients_providers.plan')
-  end</code></pre></body>
+  end</code></pre></body></main></body></html>
