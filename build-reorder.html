@@ -1,0 +1,11 @@
+<!DOCTYPE html><html><head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body onload="checkfun()"><aside><h4><a href="index.html">Main Page</a></h4><h4>Options</h4><table><tr><td><label for="fun">Tilt</label></td><td><input checked="true" id="fun" onclick="checkfun()" pattern="true" type="checkbox" /></td></tr></table></aside><main><h1>A better build order</h1><p>If you are like me, every CI/CD build you have seen is ordered like this:</p><ul><li>Run linters</li><li>Run tests</li><li>Build image artifacts</li><li>Push image to repo</li><li>Deploy image</li></ul><p>Two things are I believe wrong with this approach. First, tests do not run
+against the image and this leaves open a vector for failures in the image
+build showing on prod. Second, we should run cheaper things prior to
+expensive things and the image build should be by far cheaper than the test
+suite.</p><p>Here is what I think the general order should be:</p><ul><li>Run linters</li><li>Build image artifacts</li><li>Run tests on/against the image</li><li>Push image to repo</li><li>Deploy image</li></ul><p>I have been doing this flow for the app I have been co-founding for eight
+months and it has been working great. There is a small suite of smoke tests
+and as part of CI, I boot up the image and run the smoke tests against it.
+The regular tests are loaded into the image and are run on the image
+itself. Both of these things help ensure that it is the image itself that
+is passing checks and not just the app running on a possibly bad
+environment.</p></main></body></html>

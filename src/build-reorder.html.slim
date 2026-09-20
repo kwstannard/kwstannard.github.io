@@ -1,0 +1,39 @@
+h1 A better build order
+
+p
+  |
+    If you are like me, every CI/CD build you have seen is ordered like this:
+
+ul
+  li Run linters
+  li Run tests
+  li Build image artifacts
+  li Push image to repo
+  li Deploy image
+
+p
+  |
+    Two things are I believe wrong with this approach. First, tests do not run
+    against the image and this leaves open a vector for failures in the image
+    build showing on prod. Second, we should run cheaper things prior to
+    expensive things and the image build should be by far cheaper than the test
+    suite.
+
+p Here is what I think the general order should be:
+
+ul
+  li Run linters
+  li Build image artifacts
+  li Run tests on/against the image
+  li Push image to repo
+  li Deploy image
+
+p
+  |
+    I have been doing this flow for the app I have been co-founding for eight
+    months and it has been working great. There is a small suite of smoke tests
+    and as part of CI, I boot up the image and run the smoke tests against it.
+    The regular tests are loaded into the image and are run on the image
+    itself. Both of these things help ensure that it is the image itself that
+    is passing checks and not just the app running on a possibly bad
+    environment.
