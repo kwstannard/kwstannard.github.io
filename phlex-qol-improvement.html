@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><link href="style/post.css" rel="stylesheet" /><script src="script/post.js"></script></head><body onload="checkfun()"><aside><h4><a href="index.html">Main Page</a></h4><h4>Options</h4><table><tr><td><label for="fun">Tilt</label></td><td><input checked="true" id="fun" onclick="checkfun()" pattern="true" type="checkbox" /></td></tr></table></aside><main><h1>A better Phlex layout pattern</h1><p>Context necessary: Phlex, Rails</p><p>Phlex guides like to do this callback pattern to adhere to Rails
+view layout conventions:</p><code><pre>class MyLayout < Phlex::HTML
+  def around_template
+    doctype
+    html {
+      head { }
+      body { super }
+    }
+  end
+end
+class MyView < MyLayout
+  def view_template = p("hello world")
+end</pre></code><p>This felt weird to me, what is this mysterious around_template and why are
+we overwriting and calling super. So, I came up with a more straightforward
+alternative. Top level views define "view_body" and no callback/monkeypatch
+necessary. The method being more descriptive is an added bonus. This is how
+I am writing division929.</p><code><pre>class MyLayout < Phlex::HTML
+  def view_template
+    doctype
+    html do
+      head { }
+      body { view_body }
+    end
+  end
+end
+class MyView < MyLayout
+  def view_body = p("hello world")
+end</pre></code></main></body></html>
