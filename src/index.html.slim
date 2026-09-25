@@ -175,22 +175,13 @@ body
   .section
     h1 Posts
     ul
-      li
-        a href="1password-to-keepassxc.html" A self-hosted alternative to 1password
-      li
-        a href="simple-kamal-rails-trick.html" Kamal, Rails, and a Ruby version trick
-      li
-        a href="no-method-flash.html" Fixing a Bug With Best Practices
-      li
-        a href="id-primitive-obsession.html" ID as a Form of Primitive Obsession
-      li
-        a href="software-analogy.html" The World's Best Best Software Analogy
-      li
-        a href="software-calcifications.html" How Software Calcifies
-      li
-        a href="case_for_rails_engines.html" A Case for Rails Engines
-      li
-        a href="symlink-as-organization.html" Symlinks as an Organizational Tool
+      - files = `git ls-files *.html`.lines.map(&:chomp).map{ Pathname(it) }
+      - files.sort_by(&:mtime).reverse.each do |file|
+        - next if file.to_path == "index.html"
+        - title=file.read.match(%r[.*?<h1.*?>(.*?)</h1>])[1]
+        li
+          a href=file.to_path = title
+
   .section
     h1 Cool Code Collection
     table
